@@ -1,11 +1,10 @@
 # go-feishu
 A fast [feishu](https://open.feishu.cn/) development sdk written in Golang
 
-```
-​```shell script
+```shell script
 go get github.com/eyotang/go-feishu
-​```
-​```go
+```
+```go
 // 创建 飞书 客户端
 client, _ := feishu.NewClient()
 
@@ -44,4 +43,4 @@ opt := &BotCardMessageOption{
 	},
 }
 rsp, _, err := client.Bot.SendBotCardMessage(botKey, secret, opt)
-​```
+```
