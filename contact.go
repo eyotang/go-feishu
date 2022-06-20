@@ -1,7 +1,6 @@
 package feishu
 
 import (
-	"fmt"
 	"net/http"
 )
 
@@ -12,6 +11,10 @@ type ContactService struct {
 type BatchGetIdOptions struct {
 	Emails  []string `json:"emails,omitempty"`
 	Mobiles []string `json:"mobiles,omitempty"`
+}
+
+type BatchGetIdQueryOptions struct {
+	UserIdType string `url:"user_id_type"`
 }
 
 type User struct {
@@ -28,7 +31,8 @@ type BatchUsers struct {
 }
 
 func (s *ContactService) BatchGetId(idType string, opt *BatchGetIdOptions, options ...RequestOptionFunc) (*BatchUsers, *Response, error) {
-	u := fmt.Sprintf("contact/v3/users/batch_get_id?user_id_type=%s", idType)
+	u := "contact/v3/users/batch_get_id"
+	options = append(options, WithQuery(&BatchGetIdQueryOptions{UserIdType: idType}))
 
 	req, err := s.client.NewServerRequest(http.MethodPost, u, opt, options)
 	if err != nil {

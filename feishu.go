@@ -285,6 +285,7 @@ func (c *Client) NewRequest(method, path string, opt interface{}, options []Requ
 			if err != nil {
 				return nil, err
 			}
+			//fmt.Printf("body: %s\n", body)
 		}
 	case opt != nil:
 		q, err := query.Values(opt)

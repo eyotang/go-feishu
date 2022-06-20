@@ -2,6 +2,7 @@ package feishu
 
 import (
 	"context"
+	"github.com/google/go-querystring/query"
 	"github.com/hashicorp/go-retryablehttp"
 )
 
@@ -20,6 +21,18 @@ func WithContext(ctx context.Context) RequestOptionFunc {
 func WithToken(token string) RequestOptionFunc {
 	return func(req *retryablehttp.Request) error {
 		req.Header.Set("Authorization", "Bearer "+token)
+		return nil
+	}
+}
+
+// WithQuery adapt for post with query string.
+func WithQuery(opt interface{}) RequestOptionFunc {
+	return func(req *retryablehttp.Request) error {
+		q, err := query.Values(opt)
+		if err != nil {
+			return err
+		}
+		req.URL.RawQuery = q.Encode()
 		return nil
 	}
 }

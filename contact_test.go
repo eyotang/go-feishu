@@ -69,3 +69,27 @@ func TestContactService_BatchGetId(t *testing.T) {
 		So(users, ShouldResemble, want)
 	})
 }
+
+func TestContactService_BatchGetIdEmails(t *testing.T) {
+	Convey("test ContactService_BatchGetIdEmails", t, func() {
+
+		// NOTE: correct appId and appSecret first before run.
+		appId = "cli_a22053sdfdb8500d"
+		appSecret = "oLqRrGSecMZSmDjjasasfweMOBDxuZMIGD"
+		client, _ := NewLocalCacheClient(appId, appSecret)
+		opt := &BatchGetIdOptions{
+			Emails: []string{"tangyongqiang@hypergryph.com", "chenzhida@hypergryph.com"},
+		}
+		users, _, err := client.Contact.BatchGetId("open_id", opt)
+		So(err, ShouldBeNil)
+		want := &BatchUsers{
+			CodeMsg: CodeMsg{Code: 0, Message: "success"},
+		}
+		userList := []User{
+			{UserId: "ou_b46ad73a4db755bd1afsaf7d3a41e9f1a", Email: "tangyongqiang@hypergryph.com"},
+			{UserId: "ou_e9f93b07381f8ba7231sfad797d543a2d", Email: "chenzhida@hypergryph.com"},
+		}
+		want.Data.UserList = userList
+		So(users, ShouldResemble, want)
+	})
+}
