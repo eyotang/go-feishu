@@ -23,7 +23,7 @@ func TestContactService_BatchGetId(t *testing.T) {
 			}`)
 		})
 
-		mux.HandleFunc("/open-apis/contact/v3/users/batch_get_id", func(w http.ResponseWriter, r *http.Request) {
+		mux.HandleFunc("/open-apis/contact/v3/users/batch_get_id?user_id_type=open_id", func(w http.ResponseWriter, r *http.Request) {
 			testMethod(t, r, http.MethodPost)
 			fmt.Fprint(w, `{
 				"code": 0,
@@ -54,7 +54,7 @@ func TestContactService_BatchGetId(t *testing.T) {
 			Emails:  []string{"2sdljfl3@hypergryph.com", "tangyongqiang@hypergryph.com", "chenzhida@hypergryph.com"},
 			Mobiles: []string{"15921667242"},
 		}
-		users, _, err := client.Contact.BatchGetId(opt)
+		users, _, err := client.Contact.BatchGetId("open_id", opt)
 		So(err, ShouldBeNil)
 		want := &BatchUsers{
 			CodeMsg: CodeMsg{Code: 0, Message: "success"},

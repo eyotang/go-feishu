@@ -1,6 +1,9 @@
 package feishu
 
-import "net/http"
+import (
+	"fmt"
+	"net/http"
+)
 
 type ContactService struct {
 	client *Client
@@ -24,8 +27,8 @@ type BatchUsers struct {
 	} `data`
 }
 
-func (s *ContactService) BatchGetId(opt *BatchGetIdOptions, options ...RequestOptionFunc) (*BatchUsers, *Response, error) {
-	u := "contact/v3/users/batch_get_id"
+func (s *ContactService) BatchGetId(idType string, opt *BatchGetIdOptions, options ...RequestOptionFunc) (*BatchUsers, *Response, error) {
+	u := fmt.Sprintf("contact/v3/users/batch_get_id?user_id_type=%s", idType)
 
 	req, err := s.client.NewServerRequest(http.MethodPost, u, opt, options)
 	if err != nil {
