@@ -409,6 +409,11 @@ type ErrorMessage struct {
 	Data map[string]interface{} `json:"data"`
 }
 
+func (em *ErrorMessage) String() string {
+	buf, _ := json.Marshal(em)
+	return string(buf)
+}
+
 type ErrorResponse struct {
 	ErrorMessage
 	Body     []byte
