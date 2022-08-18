@@ -23,7 +23,7 @@ type AppCardOption struct {
 	Elements []interface{}    `json:"elements"`
 }
 
-func (s *AppService) SendAppCardMessage(receiveIDType string, opt *AppCardMessageOption, options ...RequestOptionFunc) (*CodeMsg, *Response, error) {
+func (s *AppService) SendAppCardMessage(receiveIDType string, opt *AppCardMessageOption, options ...RequestOptionFunc) (*ErrorMessage, *Response, error) {
 	u := fmt.Sprintf("im/v1/messages?receive_id_type=%s", receiveIDType)
 
 	// 尊重意愿，可以调用者在外面自己marshal。
@@ -39,7 +39,7 @@ func (s *AppService) SendAppCardMessage(receiveIDType string, opt *AppCardMessag
 		return nil, nil, err
 	}
 
-	c := new(CodeMsg)
+	c := new(ErrorMessage)
 	resp, err := s.client.Do(req, c)
 	if err != nil {
 		return nil, resp, err
