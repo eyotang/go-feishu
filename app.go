@@ -23,8 +23,13 @@ type AppCardOption struct {
 	Elements []interface{}    `json:"elements"`
 }
 
+type AppCardMessageQueryOptions struct {
+	ReceiveIdType string `url:"receive_id_type"`
+}
+
 func (s *AppService) SendAppCardMessage(receiveIDType string, opt *AppCardMessageOption, options ...RequestOptionFunc) (*ErrorMessage, *Response, error) {
-	u := fmt.Sprintf("im/v1/messages?receive_id_type=%s", receiveIDType)
+	u := fmt.Sprintf("im/v1/messages")
+	options = append(options, WithQuery(&AppCardMessageQueryOptions{ReceiveIdType: receiveIDType}))
 
 	var (
 		err error
