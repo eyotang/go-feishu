@@ -31,19 +31,15 @@ func (s *AppService) SendAppCardMessage(receiveIDType string, opt *AppCardMessag
 	u := fmt.Sprintf("im/v1/messages")
 	options = append(options, WithQuery(&AppCardMessageQueryOptions{ReceiveIdType: receiveIDType}))
 
-	var (
-		err error
-		buf []byte
-	)
 	// 尊重意愿，可以调用者在外面自己marshal。
 	if opt != nil && len(opt.Content) == 0 {
-		if buf, err = json.Marshal(opt.Card); err != nil {
+		if buf, err := json.Marshal(opt.Card); err != nil {
 			return nil, nil, err
 		} else {
 			opt.Content = string(buf)
 		}
 	}
-	req, err := s.client.NewRequest(http.MethodPost, u, opt, options)
+	req, err := s.client.NewServerRequest(http.MethodPost, u, opt, options)
 	if err != nil {
 		return nil, nil, err
 	}
