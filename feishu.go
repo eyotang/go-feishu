@@ -61,6 +61,7 @@ type Client struct {
 	Auth    *AuthService
 	Contact *ContactService
 	Bot     *BotService
+	App     *AppService
 }
 
 // RateLimiter describes the interface that all (custom) rate limiters must implement.
@@ -119,6 +120,7 @@ func newClient(options ...ClientOptionFunc) (*Client, error) {
 	c.Auth = &AuthService{client: c}
 	c.Contact = &ContactService{client: c}
 	c.Bot = &BotService{client: c}
+	c.App = &AppService{client: c}
 
 	return c, nil
 }
