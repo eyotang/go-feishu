@@ -26,9 +26,13 @@ type AppCardOption struct {
 func (s *AppService) SendAppCardMessage(receiveIDType string, opt *AppCardMessageOption, options ...RequestOptionFunc) (*ErrorMessage, *Response, error) {
 	u := fmt.Sprintf("im/v1/messages?receive_id_type=%s", receiveIDType)
 
+	var (
+		err error
+		buf []byte
+	)
 	// 尊重意愿，可以调用者在外面自己marshal。
 	if opt != nil && len(opt.Content) == 0 {
-		if buf, err := json.Marshal(opt.Card); err != nil {
+		if buf, err = json.Marshal(opt.Card); err != nil {
 			return nil, nil, err
 		} else {
 			opt.Content = string(buf)
