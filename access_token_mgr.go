@@ -14,7 +14,7 @@ type AccessTokenManager interface {
 	GetAccessToken() (err error, accessToken string)
 }
 
-type TokenRefreshFunc func() (string, error)
+type TokenRefreshFunc func() (*TenantAccessToken, error)
 
 type accessTokenManagerService struct {
 	refreshFunc TokenRefreshFunc
@@ -43,6 +43,9 @@ func (s *accessTokenManagerService) TokenKey() string {
 }
 
 func (s *accessTokenManagerService) GetAccessToken() (err error, accessToken string) {
+	var (
+		t *TenantAccessToken
+	)
 	tokenKey := s.TokenKey()
 
 	// 未过期，直接使用
@@ -61,12 +64,16 @@ func (s *accessTokenManagerService) GetAccessToken() (err error, accessToken str
 		return
 	}
 
-	if accessToken, err = s.refreshFunc(); err != nil {
+	if t, err = s.refreshFunc(); err != nil {
 		return
 	}
+	accessToken = t.AccessToken
 
 	// 保存token
-	expire := 2*time.Hour - defaultCleanup - time.Second
+	expire := time.Duration(t.Expire) - defaultCleanup - time.Second
+	if expire < 1 {
+		expire = 1
+	}
 	s.Cache.Set(tokenKey, accessToken, expire)
 	return
 }

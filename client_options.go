@@ -93,15 +93,15 @@ func WithoutRetries() ClientOptionFunc {
 
 func WithTenantAccessTokenInternal(appId, appSecret string) ClientOptionFunc {
 	return func(c *Client) error {
-		refreshFunc := func() (string, error) {
+		refreshFunc := func() (*TenantAccessToken, error) {
 			opt := &GetAccessTokenOptions{
 				AppId:     appId,
 				AppSecret: appSecret,
 			}
 			if t, _, err := c.Auth.GetTenantAccessTokenInternal(opt); err != nil {
-				return "", err
+				return nil, err
 			} else {
-				return t.AccessToken, nil
+				return t, nil
 			}
 		}
 		c.accessTokenManager = NewAccessTokenManager(appId, _tenantAccessTokenInternal, refreshFunc, WithLocalCache())
@@ -111,15 +111,15 @@ func WithTenantAccessTokenInternal(appId, appSecret string) ClientOptionFunc {
 
 func WithTenantAccessTokenInternalRedis(appId, appSecret, addr, password string) ClientOptionFunc {
 	return func(c *Client) error {
-		refreshFunc := func() (string, error) {
+		refreshFunc := func() (*TenantAccessToken, error) {
 			opt := &GetAccessTokenOptions{
 				AppId:     appId,
 				AppSecret: appSecret,
 			}
 			if t, _, err := c.Auth.GetTenantAccessTokenInternal(opt); err != nil {
-				return "", err
+				return nil, err
 			} else {
-				return t.AccessToken, nil
+				return t, nil
 			}
 		}
 		c.accessTokenManager = NewAccessTokenManager(appId, _tenantAccessTokenInternal, refreshFunc, WithRedisCache(addr, password))
