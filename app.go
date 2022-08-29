@@ -2,7 +2,6 @@ package feishu
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 )
 
@@ -28,7 +27,7 @@ type AppCardMessageQueryOptions struct {
 }
 
 func (s *AppService) SendAppCardMessage(receiveIDType string, opt *AppCardMessageOption, options ...RequestOptionFunc) (*ErrorMessage, *Response, error) {
-	u := fmt.Sprintf("im/v1/messages")
+	u := "im/v1/messages"
 	options = append(options, WithQuery(&AppCardMessageQueryOptions{ReceiveIdType: receiveIDType}))
 
 	// 尊重意愿，可以调用者在外面自己marshal。
